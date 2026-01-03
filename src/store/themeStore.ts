@@ -10,7 +10,7 @@ interface ThemeStore {
     setTheme: (mode: ThemeMode) => void;    // function buat set manual
 }
 
-export const usethemeStore = create<ThemeStore>((set) => ({
+export const useThemeStore = create<ThemeStore>((set) => ({
     mode: 'dark',   // default awal aplikasi gelap
 
     // logika switch mode
