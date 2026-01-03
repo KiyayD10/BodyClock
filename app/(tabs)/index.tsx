@@ -1,98 +1,145 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Text } from '@/components/ui/Text';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { SPACING } from '@/constants/theme';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const { colors } = useTheme();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <View style={[styles.container, { backgroundColor: colors.bg }]}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text variant="h1" weight="bold">
+              BodyClock
+            </Text>
+            <Text variant="caption" color="secondary">
+              Lacak ritme tubuh Anda
+            </Text>
+          </View>
+          <ThemeToggle />
+        </View>
+
+        {/* Neon Card */}
+        <Card variant="neon" onPress={() => console.log('Neon pressed')} style={styles.section}>
+          <Text variant="h3" weight="semibold" color="neon-cyan">
+            Cyberpunk Mode Active
+          </Text>
+          <Text variant="body" color="secondary" style={styles.cardText}>
+            Data Anda disinkronkan dan diamankan secara offline
+          </Text>
+        </Card>
+
+        {/* Summary Card */}
+        <Card style={styles.section}>
+          <Text variant="h3" weight="semibold">
+            Ringkasan Hari Ini
+          </Text>
+          <View style={styles.summaryList}>
+            <View style={styles.summaryRow}>
+              <Text color="secondary">Sleep Quality</Text>
+              <Text weight="semibold" color="neon-purple">
+                85%
+              </Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text color="secondary">Energy Level</Text>
+              <Text weight="semibold" color="neon-cyan">
+                Tinggi
+              </Text>
+            </View>
+          </View>
+        </Card>
+
+        {/* Buttons */}
+        <View style={styles.buttonGroup}>
+          <Button variant="primary" onPress={() => console.log('Primary')} fullWidth>
+            Primary Button
+          </Button>
+          <Button variant="neon" onPress={() => console.log('Neon')} fullWidth>
+            Neon Button
+          </Button>
+          <Button variant="secondary" onPress={() => console.log('Secondary')} fullWidth>
+            Secondary Button
+          </Button>
+          <Button variant="ghost" onPress={() => console.log('Ghost')} fullWidth>
+            Ghost Button
+          </Button>
+        </View>
+
+        {/* Stats Cards */}
+        <View style={styles.statsRow}>
+          <Card style={styles.statCard}>
+            <Text variant="label" color="tertiary">
+              Jam
+            </Text>
+            <Text variant="h2" weight="bold" color="neon-cyan">
+              7.5
+            </Text>
+            <Text variant="caption" color="secondary">
+              Waktu Tidur
+            </Text>
+          </Card>
+
+          <Card style={styles.statCard}>
+            <Text variant="label" color="tertiary">
+              STEPS
+            </Text>
+            <Text variant="h2" weight="bold" color="neon-purple">
+              8.2k
+            </Text>
+            <Text variant="caption" color="secondary">
+              Daily goal
+            </Text>
+          </Card>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: SPACING.lg,
+    gap: SPACING.lg,
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: SPACING.md,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  section: {
+    marginBottom: SPACING.md,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  cardText: {
+    marginTop: SPACING.sm,
+  },
+  summaryList: {
+    marginTop: SPACING.md,
+    gap: SPACING.sm,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  buttonGroup: {
+    gap: SPACING.md,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: SPACING.md,
+  },
+  statCard: {
+    flex: 1,
   },
 });
