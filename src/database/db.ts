@@ -10,7 +10,7 @@ export const initDatabase = async (): Promise<void> => {
 
         // Buat table schedule
         await db.execAsync(`
-            CREATE TABLE IF NOT EXISTS schedule (
+            CREATE TABLE IF NOT EXISTS schedule_templates (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 time TEXT NOT NULL,
@@ -38,7 +38,7 @@ export const initDatabase = async (): Promise<void> => {
 
         // Buat table setting
         await db.execAsync(`
-            CREATE TABLE IF NOT EXISTS setting (
+            CREATE TABLE IF NOT EXISTS settings (
                 key TEXT PRIMARY KEY,
                 value TEXT NOT NULL,
                 updated_at TEXT DEFAULT CURRENT_TIMESTAMP
