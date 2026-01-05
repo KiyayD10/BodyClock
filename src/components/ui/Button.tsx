@@ -1,4 +1,4 @@
-import { Pressable, Text, ActivityIndicator, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { Pressable, Text, ActivityIndicator, StyleSheet, ViewStyle, TextStyle, StyleProp } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/theme';
 
@@ -14,6 +14,7 @@ interface ButtonProps {
     disabled?: boolean;
     loading?: boolean;
     fullWidth?: boolean;
+    style?: StyleProp<ViewStyle>;
 }
 
 export function Button({
@@ -24,6 +25,7 @@ export function Button({
     disabled = false,
     loading = false,
     fullWidth = false,
+    style,
 }:  ButtonProps) {
     const { colors } = useTheme();
 
