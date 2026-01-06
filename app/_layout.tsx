@@ -1,33 +1,47 @@
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router'; 
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
-import { useDatabase } from '@/hooks/useDatabase';
+import { useDatabase } from '@/hooks/useDatabase'; 
+import { useMorningNotes } from '@/hooks/useMorningNotes';
 import { Text } from '@/components/ui/Text';
 
 export default function RootLayout() {
   const { isDark, colors } = useTheme();
-  // Panggil hook database untuk cek status inisialisasi
-  const { isReady, error } = useDatabase();
+  const { isReady, error } = useDatabase(); 
+  const { isCompleted, isLoading } = useMorningNotes();
+  const [hasChecked, setHasChecked] = useState(false);
 
-  // 1. State Loading: Tampilkan layar loading saat database sedang disiapkan
-  if (!isReady) {
+  useEffect(() => {
+    if (isReady && !isLoading && !hasChecked) {
+      setHasChecked(true);
+
+      if (!isCompleted) {
+        setTimeout(() => {
+          // @ts-ignore: Ignore sementara sampai npx expo start dijalankan
+          router.replace('/morning-notes');
+        }, 500);
+      }
+    }
+  }, [isReady, isLoading, isCompleted, hasChecked]);
+
+  if (!isReady || isLoading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: colors.bg }]}>
         <ActivityIndicator size="large" color={colors.neon.cyan} />
         <Text variant="body" color="secondary" style={styles.loadingText}>
-          Menyiapkan database...
+          Memuat data...
         </Text>
       </View>
     );
   }
 
-  // 2. State Error: Tampilkan pesan error jika inisialisasi gagal total
   if (error) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: colors.bg }]}>
         <Text variant="h3" color="neon-purple" weight="bold">
-          Gagal Memuat Database
+          Error Database
         </Text>
         <Text variant="body" color="secondary" style={styles.errorText}>
           {error.message}
@@ -36,12 +50,19 @@ export default function RootLayout() {
     );
   }
 
-  // 3. State Ready: Render navigasi utama jika database aman
   return (
     <>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="morning-notes"
+          options={{
+            headerShown: false,
+            presentation: 'card',
+            animation: 'slide_from_bottom',
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     </>
