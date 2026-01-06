@@ -47,7 +47,7 @@ export const initDatabase = async (): Promise<void> => {
 
         // Buat table morning_notes
         await db.execAsync(`
-            CREATE TABLE IF NOT EXIST morning_notes (
+            CREATE TABLE IF NOT EXISTS morning_notes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 date TEXT NOT NULL UNIQUE,
                 mood TEXT,

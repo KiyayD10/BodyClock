@@ -1,6 +1,6 @@
 import { Pressable, Text, ActivityIndicator, StyleSheet, ViewStyle, TextStyle, StyleProp } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import { RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/theme';
+import { BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/theme';
 
 // Definisi varian dan ukuran yang tersedia agar menjaga konsistensi UI
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'neon';
@@ -107,7 +107,7 @@ export function Button({
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: RADIUS.lg,
+        borderRadius: BORDER_RADIUS.lg,
         alignItems: 'center',
         justifyContent: 'center',
     },
