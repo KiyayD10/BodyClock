@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import { AlarmConfig, AlarmScheduleResult, AlarmTime } from '@/types/alarm';
+import { router } from 'expo-router';
 
 // Config handler notifikasi (saat app dibuka)
 Notifications.setNotificationHandler({
@@ -159,3 +160,19 @@ export class NotificationService {
         });
     }
 }
+
+// Helper untuk handle notif
+export const setupNotificationHandlers = () => {
+    // Handler saat notifikasi diklik user
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+        const data = response.notification.request.content.data;
+
+        // Cek apakah notifikasi ini tipe-nya 'wake' (alarm pagi)
+        if (data && data.type === 'wake') {
+            console.log('Notifikasi diklik, membuka Morning Notes...');
+            router.replace('/morning-notes' as any);
+        }
+    });
+
+  return subscription;
+};

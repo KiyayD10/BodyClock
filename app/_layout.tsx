@@ -6,6 +6,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useDatabase } from '@/hooks/useDatabase'; 
 import { useMorningNotes } from '@/hooks/useMorningNotes';
 import { Text } from '@/components/ui/Text';
+import { setupNotificationHandlers } from '@/services/NotificationService';
 
 export default function RootLayout() {
   const { isDark, colors } = useTheme();
@@ -16,6 +17,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (isReady && !isLoading && !hasChecked) {
       setHasChecked(true);
+
+      // Aktifkan listener notifikasi
+      setupNotificationHandlers();
 
       if (!isCompleted) {
         setTimeout(() => {
