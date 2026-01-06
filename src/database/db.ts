@@ -58,12 +58,42 @@ export const initDatabase = async (): Promise<void> => {
             );
         `);
 
+        // Buat table makan
+        await db.execAsync(`
+            CREATE TABLE IF NOT EXISTS meals (
+                id: INTEGER PRIMARY KEY AUTOINCREMENT,
+                name: TEXT NOT NULL,
+                type: TEXT NOT NULL CHECK(type IN ('breakfast', 'launch', 'dinner', 'snack')),
+                time: TEXT NOT NULL,
+                calories INTEGER,
+                icon: TEXT,
+                is_default: INTEGER DEFAULT 1,
+                created_at: TEXT DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
+
+        // Buat table checlist harian
+        await db.execAsync(`
+            CREATE TABLE IF NOT EXISTS daily_meals(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                meal_id INTEGER NOT NULL,
+                date TEXT NOT NULL,
+                completed INTEGER DEFAULT 0,
+                completed_at TEXT,
+                notes TEXT,
+                FOREIGN KEY (meal_id) REFERENCES meals(id) ON DELETE CASCADE,
+                UNIQUE(meal_id, date)
+            );
+        `);
+
         // Buat index
         await db.execAsync(`
             CREATE INDEX IF NOT EXISTS idx_daily_state_date ON daily_state(date);
             CREATE INDEX IF NOT EXISTS idx_daily_state_schedule_id ON daily_state(schedule_id);
             CREATE INDEX IF NOT EXISTS idx_schedule_templates_active ON schedule_templates(is_active);
             CREATE INDEX IF NOT EXISTS idx_morning_notes_date ON morning_notes(date);
+            CREATE INDEX IF NOT EXISTS idx_daily_meals_date ON daily_meals(date);
+            CREATE INDEX IF NOT EXISTS idx_meals_type ON meals(type);
         `);
 
         // Insert dfault setting
@@ -75,6 +105,22 @@ export const initDatabase = async (): Promise<void> => {
             ('app_version', '1.0.0'),
             ('morning_notes_completed_today', '0');
         `);
+
+        // Makanan
+        const mealCount = await db.getFirstAsync<{ count: number }>(
+            'SELECT COUNT(*) as count FROM meals'
+        );
+
+        if (!mealCount || mealCount.count === 0) {
+            await db.execAsync(`
+                INSERT INTO meals (name, type, time, calories, icon) VALUES
+                ('Breakfast', 'breakfast', '08:00', 400, '🍳'),
+                ('Lunch', 'lunch', '12:00', 600, '🍱'),
+                ('Dinner', 'dinner', '19:00', 500, '🍽️');
+            `);
+            console.log('Default meals inserted');
+        }
+
         console.log('Database inisialisasi selesai.');
     } catch (error) {
         console.error('Gagal inisialisasi database:', error);
