@@ -1,6 +1,6 @@
 import { View, Pressable, ViewStyle } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
-import { SPACING, RADIUS } from '@/constants/theme';
+import { SPACING, BORDER_RADIUS } from '@/constants/theme';
 
 interface CardProps {
     children: React.ReactNode;
@@ -15,7 +15,7 @@ export function Card({ children, onPress, variant = 'default', style }: CardProp
     // Style dasar card, warna border menyesuaikan jika mode neon aktif
     const cardStyle: ViewStyle = {
         backgroundColor: colors.card,
-        borderRadius: RADIUS.xl,
+        borderRadius: BORDER_RADIUS.xl,
         padding: SPACING.lg,
         borderWidth: 1,
         borderColor: variant === 'neon' ? colors.neon.cyan : colors.border,

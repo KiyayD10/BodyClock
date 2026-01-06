@@ -2,7 +2,7 @@ import { Pressable, Animated, StyleSheet } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 import { useTheme } from '@/hooks/useTheme';
-import { RADIUS } from '@/constants/theme';
+import { BORDER_RADIUS } from '@/constants/theme';
 
 export function ThemeToggle() {
     const toggleTheme = useThemeStore((state) => state.toggleTheme);
@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
     toggle: {
         width: 60,
         height: 32,
-        borderRadius: RADIUS.full,
+        borderRadius: BORDER_RADIUS.full,
         padding: 2,
         justifyContent: 'center',
     },
     thumb: {
         width: 28,
         height: 28,
-        borderRadius: RADIUS.full,
+        borderRadius: BORDER_RADIUS.full,
     },
 });

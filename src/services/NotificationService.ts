@@ -91,10 +91,27 @@ export class NotificationService {
             // Hapus alarm lama dengan ID sama biar gak duplikat
             await this.cancelAlarm(config.id);
 
-            // Tentukan trigger Harian atau Sekali
-            const trigger = config.repeatDaily
-                ? { hour: config.time.hours, minute: config.time.minutes, repeats: true }
-                : { seconds: this.calculateSecondsUntilTime(config.time), repeats: false };
+            let trigger: any;
+
+            if (config.repeatDaily) {
+                // Trigger Harian: Jam dan Menit spesifik
+                trigger = { 
+                    hour: config.time.hours, 
+                    minute: config.time.minutes, 
+                    repeats: true 
+                };
+            } else {
+                // Trigger Sekali: Hitung detik
+                const seconds = this.calculateSecondsUntilTime(config.time);
+        
+                // Safety: Detik minimal 1 agar tidak error 'invalid trigger'
+                const safeSeconds = seconds > 0 ? seconds : 1; 
+
+                trigger = { 
+                    seconds: safeSeconds, 
+                    repeats: false 
+                };
+            }
 
             const notificationId = await Notifications.scheduleNotificationAsync({
                 identifier: config.id,
@@ -106,7 +123,7 @@ export class NotificationService {
                     categoryIdentifier: 'alarm',
                     data: { type: config.type, alarmId: config.id },
                 },
-                trigger: trigger as any,
+                trigger
             });
 
             console.log(`Alarm dijadwalkan: ${config.title} @ ${config.time.hours}:${config.time.minutes}`);
