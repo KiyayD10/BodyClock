@@ -9,7 +9,7 @@ export const SPACING = {
 } as const;
 
 // border radius
-export const RADIUS = {
+export const BORDER_RADIUS = {
   sm: 8,
   md: 12,
   lg: 16,
