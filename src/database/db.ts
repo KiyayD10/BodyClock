@@ -45,11 +45,25 @@ export const initDatabase = async (): Promise<void> => {
             );
         `);
 
+        // Buat table morning_notes
+        await db.execAsync(`
+            CREATE TABLE IF NOT EXIST morning_notes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL UNIQUE,
+                mood TEXT,
+                sleep_quality INTEGER,
+                energy_level INTEGER, 
+                notes TEXT,
+                completed_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
         // Buat index
         await db.execAsync(`
             CREATE INDEX IF NOT EXISTS idx_daily_state_date ON daily_state(date);
             CREATE INDEX IF NOT EXISTS idx_daily_state_schedule_id ON daily_state(schedule_id);
             CREATE INDEX IF NOT EXISTS idx_schedule_templates_active ON schedule_templates(is_active);
+            CREATE INDEX IF NOT EXISTS idx_morning_notes_date ON morning_notes(date);
         `);
 
         // Insert dfault setting
@@ -58,7 +72,8 @@ export const initDatabase = async (): Promise<void> => {
             VALUES 
             ('last_reset_date', date('now')),
             ('theme', 'dark'),
-            ('app_version', '1.0.0');
+            ('app_version', '1.0.0'),
+            ('morning_notes_completed_today', '0');
         `);
         console.log('Database inisialisasi selesai.');
     } catch (error) {
@@ -91,6 +106,13 @@ export const resetDailyState = async (): Promise<void> => {
                 today,
                 'last_reset_date',
             ]);
+
+            // Reset status pagi hari
+            await db.runAsync(
+                'INSERT OR REPLACE INTO settings (key, value, update_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
+                ['morning_notes_completed_today', '0']
+            );
+
             console.log('Reset daily state selesai.');
         } else {
             console.log('Tidak perlu reset daily state.');
