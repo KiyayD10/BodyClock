@@ -61,14 +61,14 @@ export const initDatabase = async (): Promise<void> => {
         // Buat table makan
         await db.execAsync(`
             CREATE TABLE IF NOT EXISTS meals (
-                id: INTEGER PRIMARY KEY AUTOINCREMENT,
-                name: TEXT NOT NULL,
-                type: TEXT NOT NULL CHECK(type IN ('breakfast', 'launch', 'dinner', 'snack')),
-                time: TEXT NOT NULL,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                type TEXT NOT NULL CHECK(type IN ('breakfast', 'lunch', 'dinner', 'snack')),
+                time TEXT NOT NULL,
                 calories INTEGER,
-                icon: TEXT,
-                is_default: INTEGER DEFAULT 1,
-                created_at: TEXT DEFAULT CURRENT_TIMESTAMP
+                icon TEXT,
+                is_default INTEGER DEFAULT 1,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );
             `);
 
@@ -155,7 +155,7 @@ export const resetDailyState = async (): Promise<void> => {
 
             // Reset status pagi hari
             await db.runAsync(
-                'INSERT OR REPLACE INTO settings (key, value, update_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
+                'INSERT OR REPLACE INTO settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
                 ['morning_notes_completed_today', '0']
             );
 
