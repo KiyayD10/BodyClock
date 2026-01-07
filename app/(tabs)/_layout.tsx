@@ -24,34 +24,49 @@ export default function TabLayout() {
         },
       }}
     >
+
+      {/* Tab Home */}
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
           tabBarLabel: 'Home',
-          // Tambahkan Icon Home
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
         }}
       />
+
+      {/* Tab Alarm */}
       <Tabs.Screen
         name="alarm"
         options={{
           title: 'Alarms',
           tabBarLabel: 'Alarms',
-          // Tambahkan Icon Alarm
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'alarm' : 'alarm-outline'} size={24} color={color} />
           ),
         }}
       />
+
+      {/* Tab Today */}
+      <Tabs.Screen
+        name="today"
+        options={{
+          title: 'Today',
+          tabBarLabel: 'Today',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />
+          ),
+        }}
+      />
+
+      {/* Tab Profile */}
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
           tabBarLabel: 'Profile',
-          // Tambahkan Icon Profile
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
           ),
