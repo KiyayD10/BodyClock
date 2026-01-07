@@ -11,7 +11,7 @@ interface MealChecklistItemProps {
 
 export function MealChecklistItem({ meal, onToggle }: MealChecklistItemProps) {
     const { colors } = useTheme();
-    // Cek apakah statusnya 1 (selesai)
+    // Cek apakah statusnya selesai
     const isCompleted = meal.completed === 1;
 
     return (
@@ -84,35 +84,35 @@ export function MealChecklistItem({ meal, onToggle }: MealChecklistItemProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg, // FIX: Pakai BORDER_RADIUS
-    borderWidth: 1,
-    gap: SPACING.md,
-    marginBottom: SPACING.sm, // Tambahan margin bawah biar rapi
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: BORDER_RADIUS.sm, // FIX: Pakai BORDER_RADIUS
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  info: {
-    flex: 1,
-    gap: SPACING.xs,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.sm,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.xs,
-  },
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: SPACING.md,
+        borderRadius: BORDER_RADIUS.lg, 
+        borderWidth: 1,
+        gap: SPACING.md,
+        marginBottom: SPACING.sm, 
+    },
+    checkbox: {
+        width: 24,
+        height: 24,
+        borderRadius: BORDER_RADIUS.sm, 
+        borderWidth: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    info: {
+        flex: 1,
+        gap: SPACING.xs,
+    },
+    titleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: SPACING.sm,
+    },
+    detailRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: SPACING.xs,
+    },
 });
