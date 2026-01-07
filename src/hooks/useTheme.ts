@@ -1,17 +1,25 @@
 import { useThemeStore } from '@/store/themeStore';
 import { COLORS } from '@/constants/colors';
+import { useEffect } from 'react';
 
 // hook utama biar UI gampang dapet warna sesuai tema (Dark/Light)
 export const useTheme = () => {
-  // Ambil data mode dari Store pusat
-  const mode = useThemeStore((state) => state.mode);
+  // Ambil state dan fungsi dari store
+  const { mode, isLoaded, loadTheme } = useThemeStore();
   const isDark = mode === 'dark'; 
+
+  // Load tema dari database saat hook pertama kali dipanggil
+  useEffect(() => {
+    if (!isLoaded) {
+      loadTheme();
+    }
+  }, [isLoaded, loadTheme]);
 
   return {
     mode,
     isDark,
-    
-    // mapping warna otomatis
+
+    // Return warna sesuai mode aktif
     colors: {
       bg: isDark ? COLORS.dark.bg : COLORS.light.bg,
       card: isDark ? COLORS.dark.card : COLORS.light.card,
