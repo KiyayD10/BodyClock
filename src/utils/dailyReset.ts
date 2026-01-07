@@ -3,6 +3,7 @@ import { SettingsRepository } from '@/database/repositories/SettingsRepository';
 import { DailyStateRepository } from '@/database/repositories/DailyStateRepository';
 import { ScheduleRepository } from '@/database/repositories/ScheduleRepository';
 import { MorningNotesRepository } from '@/database/repositories/MorningNotesRepository';
+import { DailyMealsRepository } from '@/database/repositories/MealsRepository';
 
 // Cek dan reset status harian jika hari telah berganti
 export const checkAndResetDaily = async (): Promise<boolean> => {
@@ -43,7 +44,8 @@ export const weeklyCleanup = async (): Promise<void> => {
     try {
         console.log('Menjalankan pembersihan data mingguan...');
         await DailyStateRepository.cleanupOldRecords();
-        await MorningNotesRepository.cleanup()
+        await MorningNotesRepository.cleanup();
+        await DailyMealsRepository.cleanup();
         console.log('Pembersihan data selesai');
     } catch (error) {
         console.error('Gagal membersihkan data:', error);
