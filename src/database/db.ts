@@ -86,6 +86,22 @@ export const initDatabase = async (): Promise<void> => {
             );
         `);
 
+        // Buat table resep masakan
+        await db.execAsync(`
+            CREATE TABLE IF NOT EXISTS recipes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                category TEXT NOT NULL CHECK(category IN ('daging', 'ikan', 'sayur', 'tempe', 'telur', 'frozen')),
+                tags TEXT,
+                ingredients TEXT NOT NULL,
+                steps TEXT NOT NULL,
+                notes TEXT,
+                is_archived INTEGER DEFAULT 0,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
         // Buat index
         await db.execAsync(`
             CREATE INDEX IF NOT EXISTS idx_daily_state_date ON daily_state(date);
@@ -94,6 +110,9 @@ export const initDatabase = async (): Promise<void> => {
             CREATE INDEX IF NOT EXISTS idx_morning_notes_date ON morning_notes(date);
             CREATE INDEX IF NOT EXISTS idx_daily_meals_date ON daily_meals(date);
             CREATE INDEX IF NOT EXISTS idx_meals_type ON meals(type);
+            CREATE INDEX IF NOT EXISTS idx_recipes_category ON recipes(category);
+            CREATE INDEX IF NOT EXISTS idx_recipes_archived ON recipes(is_archived);
+            CREATE INDEX IF NOT EXISTS idx_recipes_title ON recipes(title);
         `);
 
         // Insert dfault setting
