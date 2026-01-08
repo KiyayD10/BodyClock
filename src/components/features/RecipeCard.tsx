@@ -82,7 +82,7 @@ export function RecipeCard({ recipe, onPress }: RecipeCardProps) {
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: BORDER_RADIUS.lg, // FIX: BORDER_RADIUS
+        borderRadius: BORDER_RADIUS.lg,
         padding: SPACING.md,
         borderWidth: 1,
         gap: SPACING.sm,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     badge: {
         paddingHorizontal: SPACING.sm,
         paddingVertical: SPACING.xs,
-        borderRadius: BORDER_RADIUS.sm, // FIX: BORDER_RADIUS
+        borderRadius: BORDER_RADIUS.sm,
     },
     tags: {
         flexDirection: 'row',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     tag: {
         paddingHorizontal: SPACING.sm,
         paddingVertical: SPACING.xs,
-        borderRadius: BORDER_RADIUS.sm, // FIX: BORDER_RADIUS
+        borderRadius: BORDER_RADIUS.sm, 
         borderWidth: 1,
     },
     info: {
