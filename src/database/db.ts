@@ -91,7 +91,7 @@ export const initDatabase = async (): Promise<void> => {
             CREATE TABLE IF NOT EXISTS recipes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
-                category TEXT NOT NULL CHECK(category IN ('daging', 'ikan', 'sayur', 'tempe', 'telur', 'frozen')),
+                category TEXT NOT NULL CHECK(category IN ('daging', 'ikan', 'sayur', 'tempe', 'telur', 'frozen', 'tahu')),
                 tags TEXT,
                 ingredients TEXT NOT NULL,
                 steps TEXT NOT NULL,
