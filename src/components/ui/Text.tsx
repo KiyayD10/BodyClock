@@ -1,20 +1,20 @@
-import { Text as RNText, TextStyle } from 'react-native';
+import { Text as RNText, TextStyle, TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { FONT_SIZE, FONT_WEIGHT } from '@/constants/theme';
 
 type TextVariant = 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'label';
-type TextColor = 'primary' | 'secondary' | 'tertiary' | 'neon-cyan' | 'neon-purple';
+// type TextColor = 'primary' | 'secondary' | 'tertiary' | 'neon-cyan' | 'neon-purple';
 
-interface TextProps {
+interface TextProps extends RNTextProps {
     children: React.ReactNode;
     variant?: TextVariant;
-    color?: TextColor;
+    color?: string;
     weight?: keyof typeof FONT_WEIGHT;
     center?: boolean;
     style?: TextStyle;
 }
 
-export function Text({ children, variant = 'body', color = 'primary', weight = 'regular', center = false, style }: TextProps) {
+export function Text({ children, variant = 'body', color = 'primary', weight = 'regular', center = false, style, ...props }: TextProps) {
     const { colors } = useTheme();
 
     // Definisi gaya tipografi (ukuran font dan line height) untuk menjaga konsistensi visual
@@ -50,6 +50,7 @@ export function Text({ children, variant = 'body', color = 'primary', weight = '
             },
             style,
             ]}
+            {...props}
         >
             {children}
         </RNText>
