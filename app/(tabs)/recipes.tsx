@@ -1,4 +1,6 @@
 import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native';
+// FIX: Gunakan SafeAreaView agar konten tidak tertutup Status Bar
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
@@ -43,7 +45,8 @@ export default function RecipesScreen() {
     const totalRecipes = Object.values(categoryCount).reduce((sum, count) => sum + count, 0);
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.bg }]}>
+        // edges={['top']} memastikan padding hanya di bagian atas layar
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]} edges={['top']}>
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
                 refreshControl={
@@ -113,7 +116,7 @@ export default function RecipesScreen() {
                 onConfirm={handleDeleteConfirm}
                 onCancel={() => setRecipeToDelete(null)}
             />
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -123,6 +126,8 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         padding: SPACING.lg,
+        // Tambahkan padding top ekstra jika dirasa masih terlalu mepet
+        paddingTop: SPACING.md,
         paddingBottom: SPACING.xxl, 
     },
     header: {
