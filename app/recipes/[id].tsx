@@ -1,6 +1,6 @@
-import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert, StatusBar, Platform } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
-import { useState, useEffect, useCallback } from 'react'; // Tambah useCallback
+import { useState, useEffect, useCallback } from 'react';
 import { Text } from '@/components/ui/Text';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -13,7 +13,6 @@ import { RecipeDeleteConfirm } from '@/components/features/RecipeDeleteConfirm';
 export default function RecipeDetailScreen() {
     const { id } = useLocalSearchParams();
     const { colors } = useTheme();
-  
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -43,9 +42,21 @@ export default function RecipeDetailScreen() {
 
     return (
         <View style={[styles.container, { backgroundColor: colors.bg }]}>
+            {/* Paksa StatusBar agar tidak translucent atau set warna background-nya */}
+            <StatusBar 
+                barStyle="light-content" 
+                backgroundColor={colors.bg} 
+                translucent={false} 
+            />
+            
             <Stack.Screen options={{ 
                 title: 'Detail Resep',
                 headerShown: true,
+                headerStyle: { 
+                    backgroundColor: colors.bg,
+                },
+                headerTintColor: colors.text.primary,
+                headerShadowVisible: false,
                 headerRight: () => (
                     <Button variant="ghost" onPress={() => setShowDeleteModal(true)}>
                         Hapus
@@ -53,8 +64,10 @@ export default function RecipeDetailScreen() {
                 )
             }} />
 
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-                {/* Konten tetap sama seperti sebelumnya */}
+            <ScrollView 
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
                 <View style={styles.header}>
                     <Text variant="h1" weight="bold">{recipe.title}</Text>
                     <View style={[styles.badge, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -100,29 +113,26 @@ export default function RecipeDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    scrollContent: { padding: SPACING.lg, gap: SPACING.xl },
-    header: { gap: SPACING.sm },
-    badge: { 
-        alignSelf: 'flex-start', 
-        paddingHorizontal: SPACING.md, 
-        paddingVertical: SPACING.xs, 
-        borderRadius: BORDER_RADIUS.full,
-        borderWidth: 1
+    container: { 
+        flex: 1,
+        // CARA AMPUH: Tambahkan padding top manual sebesar tinggi status bar khusus Android
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
+    scrollContent: { 
+        paddingHorizontal: SPACING.lg,
+        paddingBottom: SPACING.xl, 
+        paddingTop: SPACING.sm,
+        gap: SPACING.xl 
+    },
+    // ... sisa style sama
+    header: { gap: SPACING.sm, marginBottom: SPACING.sm },
+    badge: { alignSelf: 'flex-start', paddingHorizontal: SPACING.md, paddingVertical: SPACING.xs, borderRadius: BORDER_RADIUS.full, borderWidth: 1 },
     section: { gap: SPACING.md },
     sectionTitle: { marginBottom: SPACING.xs },
     cardList: { padding: SPACING.md, gap: SPACING.sm },
     listItem: { flexDirection: 'row', gap: SPACING.sm, alignItems: 'flex-start' },
     listText: { flex: 1 },
     stepContainer: { flexDirection: 'row', gap: SPACING.md, marginBottom: SPACING.sm },
-    stepNumber: { 
-        width: 28, 
-        height: 28, 
-        borderRadius: 14, 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        marginTop: 4
-    },
+    stepNumber: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginTop: 4 },
     stepCard: { flex: 1, padding: SPACING.md },
 });
