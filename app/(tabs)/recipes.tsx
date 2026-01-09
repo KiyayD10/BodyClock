@@ -1,5 +1,4 @@
 import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native';
-// FIX: Gunakan SafeAreaView agar konten tidak tertutup Status Bar
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState } from 'react';

@@ -1,4 +1,5 @@
-import { View, ScrollView, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, TextInput, Alert, StatusBar, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { router, Stack } from 'expo-router';
 import { Text } from '@/components/ui/Text';
@@ -41,11 +42,27 @@ export default function CreateRecipeScreen() {
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.bg }]}>
-            {/* Header navigasi atas */}
-            <Stack.Screen options={{ title: 'Tambah Resep Baru', headerShown: true }} />
+        // Gunakan SafeAreaView sebagai root agar konten terdorong ke bawah status bar
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]} edges={['top']}>
+            {/* Paksa status bar agar memiliki latar belakang solid di Android */}
+            <StatusBar 
+                barStyle="light-content" 
+                backgroundColor={colors.bg} 
+                translucent={false} 
+            />
+            
+            <Stack.Screen options={{ 
+                title: 'Tambah Resep Baru', 
+                headerShown: true,
+                headerStyle: { backgroundColor: colors.bg },
+                headerTintColor: colors.text.primary,
+                headerShadowVisible: false,
+            }} />
       
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView 
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
                 <Text variant="h3" weight="bold">Bikin Masakan Apa?</Text>
         
                 <View style={styles.form}>
@@ -99,13 +116,22 @@ export default function CreateRecipeScreen() {
                     Simpan Resep
                 </Button>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    scrollContent: { padding: SPACING.lg, gap: SPACING.lg },
+    container: { 
+        flex: 1,
+        // Tambahan padding top manual jika SafeAreaView masih terasa mepet di Android
+        paddingTop: Platform.OS === 'android' ? 0 : 0 
+    },
+    scrollContent: { 
+        paddingHorizontal: SPACING.lg, 
+        paddingTop: SPACING.md,
+        paddingBottom: SPACING.xl,
+        gap: SPACING.lg 
+    },
     form: { gap: SPACING.md },
     input: {
         borderWidth: 1,
