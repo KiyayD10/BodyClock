@@ -1,9 +1,14 @@
 import { Tabs } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons'; 
+import { Platform } from 'react-native';
+// FIX: Tambahkan import ini untuk menghitung area aman
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const { colors } = useTheme();
+  // Ambil data inset (jarak aman) dari sistem
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -12,19 +17,22 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: colors.card,
           borderTopColor: colors.border,
-          height: 60, 
-          paddingBottom: 8,
+          // FIX: Atur tinggi secara dinamis agar tidak tertutup tombol navigasi HP
+          height: Platform.OS === 'android' ? 65 + insets.bottom : 85, 
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           paddingTop: 8,
+          borderTopWidth: 1,
+          elevation: 8, // Tambahkan shadow dikit biar kelihatan terpisah di Android
         },
         tabBarActiveTintColor: colors.neon.cyan,
         tabBarInactiveTintColor: colors.text.tertiary,
         tabBarLabelStyle: {
           fontWeight: '600',
           fontSize: 10,
+          marginBottom: Platform.OS === 'android' ? 4 : 0, // Rapikan posisi teks di Android
         },
       }}
     >
-
       {/* Tab Home */}
       <Tabs.Screen
         name="index"
