@@ -128,4 +128,8 @@ npx expo start
 
 **buat anak kos dipake sendiri selamanya!**
 
+## 📄 License
+
+MIT License
+
 ---
