@@ -1,50 +1,131 @@
-# Welcome to your Expo app 👋
+# 🕒 BodyClock
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Personal offline-first health & lifestyle tracker**
 
-## Get started
+**BodyClock**. Aplikasi mobile pribadi yang saya bikin buat bantu kamu tracking rutinitas harian, jadwal makan, alarm, dan resep masakan—semuanya tersimpan lokal di device tanpa butuh internet!
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Fitur Utama
 
-2. Start the app
+### 🌅 Alur Pagi ( # proses )
 
-   ```bash
-   npx expo start
-   ```
+* **Wake Alarm**: Alarm bangun tidur yang tetap bunyi walau app ditutup.
+* **Morning Notes**: Tracking mood, kualitas tidur, dan level energi tiap pagi.
+* **Auto-appear**: Form catatan pagi muncul otomatis 1x sehari setelah alarm bunyi.
 
-In the output, you'll find options to open the app in a
+### 📅 Today Tracker ( # Proses )
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+* **Meal Checklist**: Tracking sarapan, siang, dan malam dengan progress visual.
+* **Daily Progress**: Ada lingkaran progress buat monitoring penyelesaian tugas hari ini.
+* **Auto Reset**: Data harian bakal reset otomatis setiap ganti hari (tengah malam).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 🍳 Recipe Manager
 
-## Get a fresh project
+* **Personal Recipes**: Simpan resep masakan pribadi kamu di sini.
+* **Smart Search**: Cari resep gampang lewat judul, bahan, atau kategori.
+* **Safe Delete**: Biar nggak asal hapus, kamu harus ketik ulang nama resepnya buat hapus permanen.
+* **Permanent Storage**: Tenang, resep masakan kamu nggak bakal ikut kehapus pas reset harian.
 
-When you're ready, run:
+---
+
+## 🛠️ Tech Stack
+
+* **Framework**: Expo SDK 52 (Versi terbaru 2025)
+* **Language**: TypeScript (Biar kodenya rapi dan minim error)
+* **Routing**: Expo Router (Sistem folder)
+* **Database**: SQLite (expo-sqlite) — Rajanya simpan data offline
+* **State**: Zustand — Simpel buat atur tema aplikasi
+
+---
+
+## 📁 Struktur Proyek (Tree)
+
+Berikut adalah peta folder di dalam proyek ini biar nggak bingung nyarinya:
 
 ```bash
-npm run reset-project
+frontend/
+├── app/                        # Expo Router (Halaman Utama)
+│   ├── (tabs)/                 # Menu Bawah (Tabs)
+│   │   ├── _layout.tsx         # Layout Tab Bar & Safe Area
+│   │   ├── alarm.tsx           # Halaman Atur Alarm
+│   │   ├── index.tsx           # Dashboard / Home
+│   │   ├── profile.tsx         # Pengaturan Tema & App
+│   │   ├── recipes.tsx         # Daftar Resep Masakan
+│   │   └── today.tsx           # Tracking Aktivitas Hari Ini
+│   ├── recipes/                # Fitur Resep (Stack)
+│   │   ├── [id].tsx            # Detail Resep (Dynamic Route)
+│   │   ├── _layout.tsx         # Header Navigasi Resep
+│   │   └── create.tsx          # Form Tambah Resep Baru
+│   └── +not-found.tsx          # Halaman Error 404
+├── src/                        # Otak Aplikasi
+│   ├── components/             # Komponen UI
+│   │   ├── features/           # Komponen Spesifik (AlarmCard, RecipeSearchBar)
+│   │   └── ui/                 # Komponen Dasar (Button, Card, Text)
+│   ├── constants/              # Warna & Tema (Design Tokens)
+│   ├── database/               # Manajemen SQLite
+│   │   ├── repositories/       # Logika Query (Recipes, Meals, Alarms)
+│   │   ├── db.ts               # Inisialisasi Database
+│   │   └── schema.sql          # Blueprint Tabel SQL
+│   ├── hooks/                  # Custom React Hooks (useAlarm, useRecipes)
+│   ├── services/               # Sistem (AlarmManager, NotificationService)
+│   ├── store/                  # Global State (themeStore.ts)
+│   ├── types/                  # Definisi Data (TypeScript)
+│   └── utils/                  # Helper (dailyReset.ts)
+├── assets/                     # Ikon & Media Aplikasi
+├── app.json                    # Konfigurasi Expo & Android ID
+└── eas.json                    # Konfigurasi Build APK
+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🗄️ Skema Database
 
-To learn more about developing your project with Expo, look at the following resources:
+Aplikasi ini pake **SQLite** buat simpan data kamu. Ada 5 tabel utama:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. **`recipes`**: Simpan resep masakan kamu selamanya (Permanent).
+2. **`meals`**: Template jadwal makan (Sarapan, Siang, Malam).
+3. **`daily_meals`**: Catatan checklist makan harian (Reset tiap hari).
+4. **`morning_notes`**: Catatan mood dan energi tiap pagi (Reset tiap hari).
+5. **`settings`**: Simpan pilihan tema dan jam alarm kamu.
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 🚀 Cara Mulai
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Kalo mau coba jalanin di laptop kamu, ikutin langkah ini:
+
+1. **Install Bahan**:
+```bash
+npm install
+
+```
+
+
+2. **Jalanin Server**:
+```bash
+npx expo start
+
+```
+
+
+3. **Buka di HP**: Scan QR Code-nya pake aplikasi **Expo Go** di Android kamu.
+
+---
+
+## 📝 Catatan Perubahan (Changelog)
+
+### v1.0.0 (Januari 2025)
+
+* ✨ Rilis perdana.
+* 🌅 Alur pagi (alarm & notes) lancar.
+* 📅 Checklist harian & progress visual.
+* 🍳 Manager resep lengkap dengan filter.
+* 🌙 Mode Gelap/Terang mantap.
+
+---
+
+**buat anak kos dipake sendiri selamanya!**
+
+---
